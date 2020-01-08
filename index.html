@@ -1,0 +1,38 @@
+<form id="payment-form" action="/Payment/Charge" method="get">
+  <!-- Other input fields to capture relevant data -->
+  <label for="billing_zip">Billing Zip Code</label>
+  <input id="billing_zip" name="billing_zip" value="47150" type="tel" />
+  
+  <!-- Target for the credit card form -->
+  <div id="credit-card"></div>
+</form>
+
+<script src="https://api2.heartlandportico.com/SecureSubmit.v1/token/gp-1.0.1/globalpayments.js"></script>
+
+<script type="text/javascript">
+// Configure account
+GlobalPayments.configure({
+  publicApiKey: "pkapi_cert_BB1jAqse6tawxLQe8Y"
+});
+
+// Create Form
+const cardForm = GlobalPayments.creditCard.form("#credit-card");
+
+
+cardForm.on("token-success", (resp) => {
+  const token = document.createElement("input");
+  token.type = "hidden";
+  token.name = "payment_token";
+  token.value = resp.paymentReference;
+  console.log(token)
+
+//   // Submit data to the integration's backend for processing
+//   const form = document.getElementById("payment-form");
+//   form.appendChild(token);
+//   form.submit();
+});
+
+cardForm.on("token-error", (resp) => {
+    // show error to the consumer
+});
+</script>
